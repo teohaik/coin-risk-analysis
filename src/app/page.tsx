@@ -2,6 +2,7 @@
 
 import { useState } from 'react'
 import {RiskAnalysisResult} from "@/app/types/riskModel";
+import CoinInput from "@/app/components/CoinInput";
 
 export default function HomePage() {
   const [coin, setCoin] = useState('')
@@ -33,12 +34,14 @@ export default function HomePage() {
       <main className="p-8 max-w-xl mx-auto space-y-6">
         <h1 className="text-2xl font-bold">🕵️‍♂️ Crypto Risk Analyzer</h1>
 
-        <input
-            className="w-full p-2 border rounded"
-            placeholder="Enter coin (e.g., bitcoin, eth)"
-            value={coin}
-            onChange={e => setCoin(e.target.value)}
-        />
+        {/*<input*/}
+        {/*    className="w-full p-2 border rounded"*/}
+        {/*    placeholder="Enter coin (e.g., bitcoin, eth)"*/}
+        {/*    value={coin}*/}
+        {/*    onChange={e => setCoin(e.target.value)}*/}
+        {/*/>*/}
+
+          <CoinInput onSelect={(coin) => setCoin(coin.id)} />
 
         <button
             onClick={analyzeCoin}

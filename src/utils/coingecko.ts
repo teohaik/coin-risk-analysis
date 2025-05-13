@@ -19,6 +19,6 @@ export async function fetchPriceHistory(coin: string) {
         return []; //throw new Error('Failed to fetch price history from CoinGecko')
     }
     const data = await response.json();
-    console.debug('Price history for coin ', coin, ' = ', data);
+   // console.debug('Price history for coin ', coin, ' = ', data);
     return data
 }

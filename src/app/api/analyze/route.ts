@@ -2,7 +2,6 @@ import { NextRequest, NextResponse } from 'next/server'
 import { fetchTweetsForCoin } from '@/utils/twitter';
 import { fetchPriceHistory } from '@/utils/coingecko'
 import { evaluateRiskWithGPT } from '@/utils/riskModel'
-import {getCoinGeckoIdBySymbol} from "@/utils/coinMap";
 
 export async function GET(req: NextRequest) {
     const { searchParams } = new URL(req.url)
@@ -12,16 +11,15 @@ export async function GET(req: NextRequest) {
         return NextResponse.json({ error: 'Missing coin param' }, { status: 400 })
     }
 
-    const coinId = getCoinGeckoIdBySymbol(coinParam) || coinParam;
 
     try {
         const [tweets, priceHistory] = await Promise.all([
             fetchTweetsForCoin(coinParam),
-            fetchPriceHistory(coinId),
+            fetchPriceHistory(coinParam),
         ])
 
         const riskAnalysis = await evaluateRiskWithGPT(coinParam, tweets, priceHistory)
-        riskAnalysis.coinId = coinId;
+        riskAnalysis.coinId = coinParam;
 
         return NextResponse.json(riskAnalysis)
     } catch (err) {
