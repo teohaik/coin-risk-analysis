@@ -36,7 +36,11 @@ export default function HomePage() {
 
   return (
       <main className="p-8 max-w-xl mx-auto space-y-6">
-        <h1 className="text-2xl font-bold">🕵️‍♂️ Crypto Risk Analyzer</h1>
+        <h1 className="text-2xl font-bold">🧙‍♂️ Sophron: Risk Analyzer</h1>
+        <p className="text-gray-700 italic">
+          <strong>Sophron (Σώφρων)</strong> is an ancient Greek adjective that means:
+          “of sound mind,” “self-controlled,” “prudent,” or “moderate.”
+        </p>
 
         <CoinInput onSelect={(coin) => setCoin(coin.id)} />
 

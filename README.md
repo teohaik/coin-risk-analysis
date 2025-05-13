@@ -1,6 +1,12 @@
-# Crypto Risk Analyzer
+# Sophron: A crypto coin risk analyzer
 
-A lightweight AI-assisted web app for evaluating the risk of cryptocurrency coins based on Twitter sentiment and CoinGecko price data. Built with Next.js and React, using OpenAI for analysis.
+Lightweight AI-assisted web app for evaluating the risk of cryptocurrency coins based on Twitter sentiment and CoinGecko price data. Built with Next.js and React, using OpenAI for analysis.
+
+    Sophron (Σώφρων) is an ancient Greek adjective that means:
+    “of sound mind,” “self-controlled,” “prudent,” or “moderate.”
+    It comes from the root words:
+    •	σῶς (sōs) — safe, sound
+    •	φρήν (phrēn) — mind, heart, or spirit
 
 ## Features
 

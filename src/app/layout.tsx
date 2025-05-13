@@ -14,7 +14,7 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Crypto Risk Analyzer",
+  title: "Sophron Risk Analyzer",
   description: "A lightweight AI-assisted web app for evaluating the risk of cryptocurrency coins based on Twitter sentiment and CoinGecko price data.",
 };
 
