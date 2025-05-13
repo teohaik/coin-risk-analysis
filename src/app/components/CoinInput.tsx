@@ -1,19 +1,18 @@
 import {useEffect, useState} from 'react'
 import {searchCoinsBySymbol} from "@/utils/coinMap";
+import {Coin} from "@/app/types/coin";
 
-export default function CoinInput({onSelect}: { onSelect: (coin: any) => void }) {
+export default function CoinInput({onSelect}: { onSelect: (coin: Coin) => void }) {
     const [query, setQuery] = useState('')
-    const [results, setResults] = useState<any[]>([])
-    const [timeoutId, setTimeoutId] = useState<NodeJS.Timeout | null>(null)
+    const [results, setResults] = useState<Coin[]>([])
 
     useEffect(() => {
-        if (timeoutId) clearTimeout(timeoutId)
-
         const id = setTimeout(() => {
             const matches = searchCoinsBySymbol(query)
             setResults(matches)
-        }, 300) // debounce delay
-        setTimeoutId(id)
+        }, 300)
+
+        return () => clearTimeout(id)
     }, [query])
 
     return (

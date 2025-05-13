@@ -23,8 +23,12 @@ export default function HomePage() {
       if (!res.ok) throw new Error(data.error || 'Unknown error')
 
       setResult(data)
-    } catch (err: any) {
-      setError(err.message)
+    } catch (err: unknown) {
+      if (err instanceof Error) {
+        setError(err.message)
+      } else {
+        setError('An unknown error occurred')
+      }
     } finally {
       setLoading(false)
     }
@@ -34,14 +38,7 @@ export default function HomePage() {
       <main className="p-8 max-w-xl mx-auto space-y-6">
         <h1 className="text-2xl font-bold">🕵️‍♂️ Crypto Risk Analyzer</h1>
 
-        {/*<input*/}
-        {/*    className="w-full p-2 border rounded"*/}
-        {/*    placeholder="Enter coin (e.g., bitcoin, eth)"*/}
-        {/*    value={coin}*/}
-        {/*    onChange={e => setCoin(e.target.value)}*/}
-        {/*/>*/}
-
-          <CoinInput onSelect={(coin) => setCoin(coin.id)} />
+        <CoinInput onSelect={(coin) => setCoin(coin.id)} />
 
         <button
             onClick={analyzeCoin}
