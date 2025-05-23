@@ -2,24 +2,45 @@ import { NextRequest, NextResponse } from 'next/server'
 import { fetchTweetsForCoin } from '@/utils/twitter';
 import { fetchPriceHistory } from '@/utils/coingecko'
 import { evaluateRiskWithGPT } from '@/utils/riskModel'
+import {isRecaptchaValid} from "@/app/api/recaptcha/verifyRecaptcha";
 
-export async function GET(req: NextRequest) {
-    const { searchParams } = new URL(req.url)
-    const coinParam= searchParams.get('coin')
+export async function POST(req: NextRequest) {
+    const body = await req.json();
+    const { coin, token, userAction } = body;
 
-    if (!coinParam) {
+    if (!coin) {
         return NextResponse.json({ error: 'Missing coin param' }, { status: 400 })
     }
 
+    if (!token || !userAction) {
+        return NextResponse.json(
+            { success: false, reason: "Missing token or userAction" },
+            { status: 400 }
+        );
+    }
+
+    // Validate reCAPTCHA
+    const isValidHuman = await isRecaptchaValid(
+        token,
+        userAction,
+        req.headers.get("user-agent") || undefined
+    );
+
+    if (!isValidHuman) {
+        return NextResponse.json(
+            { success: false, reason: "reCAPTCHA validation failed." },
+            { status: 403 }
+        );
+    }
 
     try {
         const [tweets, priceHistory] = await Promise.all([
-            fetchTweetsForCoin(coinParam),
-            fetchPriceHistory(coinParam),
+            fetchTweetsForCoin(coin),
+            fetchPriceHistory(coin),
         ])
 
-        const riskAnalysis = await evaluateRiskWithGPT(coinParam, tweets, priceHistory)
-        riskAnalysis.coinId = coinParam;
+        const riskAnalysis = await evaluateRiskWithGPT(coin, tweets, priceHistory)
+        riskAnalysis.coinId = coin;
 
         return NextResponse.json(riskAnalysis)
     } catch (err) {

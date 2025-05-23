@@ -1,6 +1,8 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
+import {ReCaptchaProvider} from "next-recaptcha-v3";
+import clientConfig from "@/app/config/clientConfig";
 
 
 const geistSans = Geist({
@@ -28,7 +30,12 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
+      <ReCaptchaProvider
+          useEnterprise
+          reCaptchaKey={clientConfig.RECAPTCHA_SITE_KEY || ""}
+      >
         {children}
+      </ReCaptchaProvider>
       </body>
     </html>
   );
