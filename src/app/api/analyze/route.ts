@@ -12,6 +12,13 @@ export async function POST(req: NextRequest) {
         return NextResponse.json({ error: 'Missing coin param' }, { status: 400 })
     }
 
+    if (!token || !userAction) {
+        return NextResponse.json(
+            { success: false, reason: "Missing token or userAction" },
+            { status: 400 }
+        );
+    }
+
     // Validate reCAPTCHA
     const isValidHuman = await isRecaptchaValid(
         token,

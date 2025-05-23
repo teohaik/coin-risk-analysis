@@ -16,7 +16,7 @@ const serverConfigSchema = z.object({
     TWITTER_BEARER_TOKEN: z.string(),
     RECAPTCHA_API_SECRET_KEY: z.string().optional(),
     RECAPTCHA_SITE_KEY: z.string().optional(),
-    RECAPTCHA_MIN_SCORE_ACCEPTED: z.number().optional(),
+    RECAPTCHA_MIN_SCORE_ACCEPTED: z.string().optional(),
     GOOGLE_PROJECT_ID: z.string().optional(),
 });
 
