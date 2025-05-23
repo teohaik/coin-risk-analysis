@@ -1,6 +1,7 @@
 import axios from "axios";
 import { RecaptchaApiResponse } from "../../types/ReCaptcha";
 import serverConfig from "../../config/serverConfig";
+import clientConfig from "@/app/config/clientConfig";
 
 export async function isRecaptchaValid(
   token: string,
@@ -10,7 +11,7 @@ export async function isRecaptchaValid(
   try {
     const API_KEY = serverConfig.RECAPTCHA_API_SECRET_KEY;
     const PROJECT_ID = serverConfig.GOOGLE_PROJECT_ID;
-    const SITE_KEY = serverConfig.RECAPTCHA_SITE_KEY;
+    const SITE_KEY = clientConfig.RECAPTCHA_SITE_KEY;
 
     if (!API_KEY || !PROJECT_ID || !SITE_KEY) {
       console.error("Missing required environment variables for reCAPTCHA.");

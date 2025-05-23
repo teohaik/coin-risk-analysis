@@ -15,7 +15,6 @@ const serverConfigSchema = z.object({
     OPENAI_API_KEY: z.string(),
     TWITTER_BEARER_TOKEN: z.string(),
     RECAPTCHA_API_SECRET_KEY: z.string().optional(),
-    RECAPTCHA_SITE_KEY: z.string().optional(),
     RECAPTCHA_MIN_SCORE_ACCEPTED: z.string().optional(),
     GOOGLE_PROJECT_ID: z.string().optional(),
 });
@@ -26,7 +25,6 @@ const serverConfig = serverConfigSchema.safeParse({
     OPENAI_API_KEY: process.env.OPENAI_API_KEY,
     TWITTER_BEARER_TOKEN: process.env.TWITTER_BEARER_TOKEN,
     RECAPTCHA_API_SECRET_KEY: process.env.RECAPTCHA_API_SECRET_KEY,
-    RECAPTCHA_SITE_KEY: process.env.RECAPTCHA_SITE_KEY,
     RECAPTCHA_MIN_SCORE_ACCEPTED: process.env.RECAPTCHA_MIN_SCORE_ACCEPTED,
     GOOGLE_PROJECT_ID: process.env.GOOGLE_PROJECT_ID,
 });
