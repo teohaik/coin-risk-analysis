@@ -1,6 +1,6 @@
-import OpenAI  from 'openai'
+import OpenAI from 'openai';
 import serverConfig from "@/app/config/serverConfig";
-import {RiskAnalysisResult} from "@/app/types/riskModel";
+import { RiskAnalysisResult } from "@/app/types/riskModel";
 
 export async function evaluateRiskWithGPT(
     coin: string,
@@ -19,7 +19,7 @@ ${priceHistory.prices
         .map(([ts, price]) => `(${new Date(ts).toISOString()}, $${price.toFixed(2)})`)
         .join('\n')}
 
-Return only a **raw JSON object**, without any markdown or formatting. 
+Return only a **raw JSON object**, without any markdown or formatting.
 Do NOT wrap it in triple backticks or say "Here's the JSON".
 Just respond with plain JSON only:
 
@@ -28,25 +28,44 @@ Just respond with plain JSON only:
 - riskScore (float 0.0 to 1.0)
 - verdict ("Low Risk", "Medium Risk", or "High Risk")
 - explanation (a short summary)
-`
+`;
 
-    const client = new OpenAI({apiKey: serverConfig.OPENAI_API_KEY});
+    const client = new OpenAI({ apiKey: serverConfig.OPENAI_API_KEY });
 
-    const response = await client.responses.create({
-        model: "gpt-4.1",
-        instructions: 'You are a crypto risk analyst.' +
-            'Your task is to assess the risk of a cryptocurrency coin based on:' +
-            '1. Recent tweets mentioning the coin.' +
-            '2. The coin\'s 7-day price history.',
-        input: [{ role: 'user', content: prompt }],
-        temperature: 0.3,
-    });
-
-    const resultText = response.output_text ?? '{}'
     try {
-        return JSON.parse(resultText)
+        const response = await client.responses.create({
+            model: "gpt-4.1",
+            instructions: 'You are a crypto risk analyst.' +
+                'Your task is to assess the risk of a cryptocurrency coin based on:' +
+                '1. Recent tweets mentioning the coin.' +
+                '2. The coin\'s 30-day price history.',
+            input: [{ role: 'user', content: prompt }],
+            temperature: 0.3,
+        });
+
+        const resultText = response.output_text ?? '{}';
+
+        if (!resultText.trim()) {
+            console.error('GPT response is empty or undefined:', resultText);
+            throw new Error('GPT response is empty');
+        }
+
+        const parsedResult = JSON.parse(resultText);
+
+        if (
+            typeof parsedResult.sentiment !== 'string' ||
+            !Array.isArray(parsedResult.scamIndicators) ||
+            typeof parsedResult.riskScore !== 'number' ||
+            typeof parsedResult.verdict !== 'string' ||
+            typeof parsedResult.explanation !== 'string'
+        ) {
+            console.error('GPT response has an unexpected structure:', parsedResult);
+            throw new Error('GPT response has an invalid structure');
+        }
+
+        return parsedResult;
     } catch (err) {
-        console.error('Failed to parse GPT response:', resultText, " Inner error: " , err);
-        throw new Error('GPT response was not valid JSON')
+        console.error('Error while processing GPT response:', err);
+        throw new Error('Failed to evaluate risk with GPT');
     }
 }
