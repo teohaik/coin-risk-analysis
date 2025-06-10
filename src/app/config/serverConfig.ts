@@ -14,6 +14,15 @@ const serverConfigSchema = z.object({
     CRON_SECRET: z.string(),
     OPENAI_API_KEY: z.string(),
     TWITTER_BEARER_TOKEN: z.string(),
+    RECAPTCHA_API_SECRET_KEY: z.string().optional(),
+    RECAPTCHA_MIN_SCORE_ACCEPTED: z
+        .string()
+        .transform((val) => Number(val))
+        .refine((num) => !isNaN(num) && num >= 0 && num <= 1, {
+            message: "RECAPTCHA_MIN_SCORE_ACCEPTED must be a number between 0 and 1",
+        })
+        .optional(),
+    GOOGLE_PROJECT_ID: z.string().optional(),
 });
 
 const serverConfig = serverConfigSchema.safeParse({
@@ -21,6 +30,9 @@ const serverConfig = serverConfigSchema.safeParse({
     CRON_SECRET: process.env.CRON_SECRET,
     OPENAI_API_KEY: process.env.OPENAI_API_KEY,
     TWITTER_BEARER_TOKEN: process.env.TWITTER_BEARER_TOKEN,
+    RECAPTCHA_API_SECRET_KEY: process.env.RECAPTCHA_API_SECRET_KEY,
+    RECAPTCHA_MIN_SCORE_ACCEPTED: process.env.RECAPTCHA_MIN_SCORE_ACCEPTED,
+    GOOGLE_PROJECT_ID: process.env.GOOGLE_PROJECT_ID,
 });
 
 if (!serverConfig.success) {
