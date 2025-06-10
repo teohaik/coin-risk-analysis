@@ -24,6 +24,10 @@ export interface RecaptchaApiResponse {
   tokenProperties: TokenProperties;
   riskAnalysis: RiskAnalysis;
   event: Event;
+  /**
+   * A unique identifier for the reCAPTCHA response, typically used for debugging or logging purposes.
+   * This value is provided by the reCAPTCHA API.
+   */
   name: string;
 }
 
