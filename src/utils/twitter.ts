@@ -15,7 +15,7 @@ export async function fetchTweetsForCoin(coin: string): Promise<string[]> {
     if (!bearerToken) throw new Error('Missing Twitter Bearer Token')
 
     const query = encodeURIComponent(`#${coin} OR ${coin} lang:en -is:retweet`)
-    const url = `https://api.twitter.com/2/tweets/search/recent?query=${query}&max_results=100&tweet.fields=text,lang`
+    const url = `https://api.twitter.com/2/tweets/search/recent?query=${query}&max_results=200&tweet.fields=text,lang`
 
     const res = await fetch(url, {
         headers: {
