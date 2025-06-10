@@ -59,7 +59,7 @@ function evaluateGoogleAssessment(
       response.tokenProperties.valid &&
       response.tokenProperties.action === userAction &&
       response.riskAnalysis.score >=
-        (Number(serverConfig.RECAPTCHA_MIN_SCORE_ACCEPTED) || 0.5)
+        (Number(serverConfig.RECAPTCHA_MIN_SCORE_ACCEPTED) ?? 0.5)
     );
   }
   return false;
