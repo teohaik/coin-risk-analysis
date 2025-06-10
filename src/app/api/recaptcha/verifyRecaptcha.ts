@@ -31,7 +31,8 @@ export async function isRecaptchaValid(
       },
     };
 
-    console.log("Sending payload to reCAPTCHA Enterprise:", payload);
+    const redactedPayload = { ...payload, event: { ...payload.event, token: "[REDACTED]" } };
+    console.log("Sending payload to reCAPTCHA Enterprise:", redactedPayload);
 
     const response = await axios.post(endpoint, payload);
     console.log("Received response from reCAPTCHA:", response.data);
