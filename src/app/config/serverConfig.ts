@@ -15,7 +15,13 @@ const serverConfigSchema = z.object({
     OPENAI_API_KEY: z.string(),
     TWITTER_BEARER_TOKEN: z.string(),
     RECAPTCHA_API_SECRET_KEY: z.string().optional(),
-    RECAPTCHA_MIN_SCORE_ACCEPTED: z.string().optional(),
+    RECAPTCHA_MIN_SCORE_ACCEPTED: z
+        .string()
+        .transform((val) => Number(val))
+        .refine((num) => !isNaN(num) && num >= 0 && num <= 1, {
+            message: "RECAPTCHA_MIN_SCORE_ACCEPTED must be a number between 0 and 1",
+        })
+        .optional(),
     GOOGLE_PROJECT_ID: z.string().optional(),
 });
 
