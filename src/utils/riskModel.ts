@@ -30,7 +30,10 @@ Just respond with plain JSON only:
 - explanation (a short summary)
 `;
 
-    const client = new OpenAI({ apiKey: serverConfig.OPENAI_API_KEY });
+    const client = new OpenAI({
+        apiKey: serverConfig.OPENAI_API_KEY,
+        timeout: 30000
+    });
 
     try {
         const response = await client.responses.create({
